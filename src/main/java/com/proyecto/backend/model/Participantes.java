@@ -1,12 +1,27 @@
 package models;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "PARTICIPANTES")
+@AttributeOverride(name = "id", column = @Column(name = "PARTICIPANTE_ID"))
 public class Participantes extends Persona {
 
+    @Column(name = "CORREO", nullable = false)
+    private String correo;
+
+    @Column(name = "UBICACION", nullable = false)
     private String ubicacion_participante;
+
+    @Column(name = "ROL", nullable = false)
     private String rol_participante;
+
+    protected Participantes() {
+    }
 
     public Participantes(String id, String nombre, String ubicacion, String correo, String rol) {
         super(id, nombre, correo);
+        this.correo = correo;
         this.ubicacion_participante = ubicacion;
         this.rol_participante = rol;
     }

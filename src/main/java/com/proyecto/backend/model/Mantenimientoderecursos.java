@@ -1,8 +1,27 @@
 package models;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "MANTENIMIENTO_RECURSOS")
+@AttributeOverrides({
+    @AttributeOverride(name = "id",        column = @Column(name = "MMTO_ID")),
+    @AttributeOverride(name = "nombre",    column = @Column(name = "NOMBRE_TECNICO", nullable = false)),
+    @AttributeOverride(name = "categoria", column = @Column(name = "DESCRIPCION")),
+    @AttributeOverride(name = "estado",    column = @Column(name = "DESCRIPCION", insertable = false, updatable = false)),
+    @AttributeOverride(name = "ubicacion", column = @Column(name = "NOMBRE_TECNICO", insertable = false, updatable = false))
+})
 public class Mantenimientoderecursos extends RecursoBase {
 
+    @Column(name = "FECHA")
     private String fechadeingreso_mantenimientorecursos;
+
+    @Column(name = "RECURSO_ID")
+    private Integer recursoId;
+
+    protected Mantenimientoderecursos() {
+        super(null, null, null, null, null);
+    }
 
     public Mantenimientoderecursos(String id, String nombre, String categoria, String estado,
             String ubicacion, String fechadeingreso_mantenimientorecursos) {

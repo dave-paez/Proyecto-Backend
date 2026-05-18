@@ -1,11 +1,25 @@
 package models;
 
+import jakarta.persistence.*;
+
 //juan duarte
+
+@Entity
+@Table(name = "PATROCINIO")
+@AttributeOverride(name = "id", column = @Column(name = "PATROCINADOR_ID"))
 public class Patrocinios extends Persona {
 
+    @Column(name = "CONTACTO", nullable = false)
     private String contacto_patrocinador;
+
+    @Column(name = "TIPO")
     private String tipo_patrocinador;
+
+    @Column(name = "APORTE")
     private String aporte_patrocinador;
+
+    protected Patrocinios() {
+    }
 
     public Patrocinios(String id, String nombre, String correo, String contacto_patrocinador, String tipo_patrocinador,
             String aporte_patrocinador) {
@@ -53,5 +67,5 @@ public class Patrocinios extends Persona {
     public void setAporte_patrocinador(String aporte_patrocinador) {
         this.aporte_patrocinador = aporte_patrocinador;
     }
-    
+
 }

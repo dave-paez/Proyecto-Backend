@@ -1,11 +1,25 @@
 package models;
 
+import jakarta.persistence.*;
+
 //Segunda clase abstracta - creado por juan duarte
+
+@MappedSuperclass
 public abstract class RecursoBase implements Gestionable {
+
+  @Id
   protected String id;
+
+  @Column(name = "NOMBRE", nullable = false)
   protected String nombre;
+
+  @Column(name = "CATEGORIA", nullable = false)
   protected String categoria;
+
+  @Column(name = "ESTADO", nullable = false)
   protected String estado;
+
+  @Column(name = "UBICACION", nullable = false)
   protected String ubicacion;
 
   public RecursoBase(String id, String nombre, String categoria, String estado, String ubicacion) {

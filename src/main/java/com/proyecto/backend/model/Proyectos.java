@@ -1,12 +1,29 @@
 package models;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "PROYECTOS")
+@AttributeOverride(name = "id", column = @Column(name = "PROYECTO_ID"))
 public class Proyectos extends Persona implements Gestionable {
 
+    @Column(name = "TIPO")
     private String tipo;
+
+    @Column(name = "DESCRIPCION")
     private String descripcion;
+
+    @Column(name = "FECHA_INICIO", nullable = false)
     private String fechaInicio;
+
+    @Column(name = "FECHA_FIN")
     private String fechaFin;
+
+    @Column(name = "ESTADO", nullable = false)
     private String estado;
+
+    protected Proyectos() {
+    }
 
     public Proyectos(String id, String nombre, String correo, String tipo, String descripcion, String fechaInicio,
             String fechaFin, String estado) {
@@ -44,45 +61,45 @@ public class Proyectos extends Persona implements Gestionable {
         System.out.println(traerDetalles());
     }
 
-    public String getProyectoId(){ 
-        return id; 
+    public String getProyectoId(){
+        return id;
     }
-    public String getNombre_proyecto(){ 
-        return nombre; 
+    public String getNombre_proyecto(){
+        return nombre;
     }
-    public String getTipo_proyecto(){ 
-        return tipo; 
+    public String getTipo_proyecto(){
+        return tipo;
     }
-    public String getDescripcion_proyecto(){ 
-        return descripcion; 
+    public String getDescripcion_proyecto(){
+        return descripcion;
     }
-    public String getFechaInicio_proyecto(){ 
-        return fechaInicio; 
+    public String getFechaInicio_proyecto(){
+        return fechaInicio;
     }
-    public String getFechaFin_proyecto(){ 
-        return fechaFin; 
+    public String getFechaFin_proyecto(){
+        return fechaFin;
     }
-    public String getEstado_proyecto(){ 
-        return estado; 
+    public String getEstado_proyecto(){
+        return estado;
     }
 
-    public void setNombre_proyecto(String nombre){ 
-        this.nombre = nombre; 
+    public void setNombre_proyecto(String nombre){
+        this.nombre = nombre;
     }
-    public void setTipo_proyecto(String tipo){ 
-        this.tipo = tipo; 
+    public void setTipo_proyecto(String tipo){
+        this.tipo = tipo;
     }
-    public void setDescripcion_proyecto(String descripcion){ 
-        this.descripcion = descripcion; 
+    public void setDescripcion_proyecto(String descripcion){
+        this.descripcion = descripcion;
     }
-    public void setFechaInicio_proyecto(String fechaInicio){ 
-        this.fechaInicio = fechaInicio; 
+    public void setFechaInicio_proyecto(String fechaInicio){
+        this.fechaInicio = fechaInicio;
     }
-    public void setFechaFin_proyecto(String fechaFin){ 
-        this.fechaFin = fechaFin; 
+    public void setFechaFin_proyecto(String fechaFin){
+        this.fechaFin = fechaFin;
     }
-    public void setEstado_proyecto(String estado){ 
-        this.estado = estado; 
+    public void setEstado_proyecto(String estado){
+        this.estado = estado;
     }
 
 }

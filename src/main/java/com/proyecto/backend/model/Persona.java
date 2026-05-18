@@ -1,11 +1,20 @@
 package models;
 
+import jakarta.persistence.*;
+
 //primera clase padre - creado por dave paez.
 //modificado por juan duarte..
 
+@MappedSuperclass
 public abstract class Persona {
+
+  @Id
   protected String id;
+
+  @Column(name = "NOMBRE", nullable = false)
   protected String nombre;
+
+  @Transient
   protected String correo;
 
   public Persona() {
@@ -44,5 +53,5 @@ public abstract class Persona {
   public void setCorreo(String correo) {
     this.correo = correo;
   }
-  
+
 }
