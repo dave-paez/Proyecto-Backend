@@ -1,4 +1,4 @@
-package models;
+package com.proyecto.backend.model;
 
 public class Proyectos extends Persona implements Gestionable {
 
@@ -82,7 +82,6 @@ public class Proyectos extends Persona implements Gestionable {
         this.fechaFin = fechaFin; 
     }
     public void setEstado_proyecto(String estado){ 
-        this.estado = estado; 
+        this.estado = estado;
     }
-
 }

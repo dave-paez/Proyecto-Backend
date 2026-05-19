@@ -1,6 +1,6 @@
-package models;
+package com.proyecto.backend.model;
 
-public interface funcionescrud {
+public interface Funcionescrud {
 
     void guardar(RecursoBase recurso);
  
