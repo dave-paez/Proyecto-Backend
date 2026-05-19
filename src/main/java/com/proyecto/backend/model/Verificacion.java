@@ -1,4 +1,4 @@
-package models;
+package com.proyecto.backend.model;
 
 public class Verificacion extends Persona {
 
