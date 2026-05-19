@@ -1,4 +1,4 @@
-package models;
+package com.proyecto.backend.model;
 
 //juan duarte
 public class Patrocinios extends Persona {

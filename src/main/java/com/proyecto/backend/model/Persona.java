@@ -1,4 +1,4 @@
-package models;
+package com.proyecto.backend.model;
 
 //primera clase padre - creado por dave paez.
 //modificado por juan duarte..

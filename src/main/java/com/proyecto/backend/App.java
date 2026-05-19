@@ -1,12 +1,12 @@
 
 //Importamos los modelos
-import models.Persona;
-import models.Mantenimientoderecursos;
-import models.Participantes;
-import models.Patrocinios;
-import models.Recursos;
-import models.Verificacion;
-import models.Proyectos;
+import com.proyecto.backend.model.Mantenimientoderecursos;
+import com.proyecto.backend.model.Participantes;
+import com.proyecto.backend.model.Proyectos;
+import com.proyecto.backend.model.Recursos;
+import com.proyecto.backend.model.Verificacion;
+import com.proyecto.backend.model.Patrocinios;
+
 
 // importamos el array
 import java.util.ArrayList;

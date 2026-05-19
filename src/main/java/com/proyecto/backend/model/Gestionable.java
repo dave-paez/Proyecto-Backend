@@ -1,4 +1,4 @@
-package models;
+package com.proyecto.backend.model;
 
 //Primer interface - creado por juan duarte
 public interface Gestionable {

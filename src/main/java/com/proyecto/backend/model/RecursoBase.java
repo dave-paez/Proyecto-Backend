@@ -1,4 +1,4 @@
-package models;
+package com.proyecto.backend.model;
 
 //Segunda clase abstracta - creado por juan duarte
 public abstract class RecursoBase implements Gestionable {
