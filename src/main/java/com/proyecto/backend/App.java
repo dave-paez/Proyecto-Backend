@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import javax.swing.JOptionPane;
 import java.util.List;
-import java.util.Optional;
 
 @Component
 public class App implements CommandLineRunner {
@@ -63,13 +62,13 @@ public class App implements CommandLineRunner {
 
                         switch (opcion1) {
                             case 1:
-                                Id_delregistro     = JOptionPane.showInputDialog("Ingrese su ID:");
+                                Id_delregistro         = JOptionPane.showInputDialog("Ingrese su ID:");
                                 contraseña_delregistro = JOptionPane.showInputDialog("Ingrese su contraseña:");
 
-                                Optional<Verificacion> usuarioOpt = verificacionRepository.findById(Id_delregistro);
-                                boolean encontrado = usuarioOpt.isPresent()
-                                        && usuarioOpt.get().getContraseña_personaladiministrativo()
-                                                     .equals(contraseña_delregistro);
+                                Verificacion usuarioEncontrado = verificacionRepository.buscar(Id_delregistro);
+                                boolean encontrado = usuarioEncontrado != null
+                                        && usuarioEncontrado.getContraseña_personaladiministrativo()
+                                                            .equals(contraseña_delregistro);
 
                                 if (encontrado) {
                                     JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso");
@@ -94,9 +93,10 @@ public class App implements CommandLineRunner {
                                                             "PROYECTOS \n"
                                                             + "1. Registrar proyecto \n"
                                                             + "2. Ver todos los proyectos \n"
-                                                            + "3. Actualizar proyecto \n"
-                                                            + "4. Eliminar proyecto \n"
-                                                            + "5. Salir"));
+                                                            + "3. Buscar proyecto por ID \n"
+                                                            + "4. Actualizar proyecto \n"
+                                                            + "5. Eliminar proyecto \n"
+                                                            + "6. Salir"));
 
                                                     switch (opcionproyectos) {
                                                         case 1:
@@ -104,14 +104,14 @@ public class App implements CommandLineRunner {
                                                             if (proyectosRepository.existsById(Id_delproyecto)) {
                                                                 JOptionPane.showMessageDialog(null, "ese ID ya existe");
                                                             } else {
-                                                                nombre_delproyecto    = JOptionPane.showInputDialog("Ingrese el nombre del proyecto");
-                                                                tipo_delproyecto      = JOptionPane.showInputDialog("Ingrese el tipo del proyecto");
+                                                                nombre_delproyecto      = JOptionPane.showInputDialog("Ingrese el nombre del proyecto");
+                                                                tipo_delproyecto        = JOptionPane.showInputDialog("Ingrese el tipo del proyecto");
                                                                 descripcion_delproyecto = JOptionPane.showInputDialog("Ingrese la descripcion del proyecto");
-                                                                estado_delproyecto    = JOptionPane.showInputDialog("Ingrese el estado del proyecto");
+                                                                estado_delproyecto      = JOptionPane.showInputDialog("Ingrese el estado del proyecto");
                                                                 fechaInicio_delproyecto = JOptionPane.showInputDialog("Ingrese la fecha de inicio");
-                                                                fechaFin_delproyecto  = JOptionPane.showInputDialog("Ingrese la fecha de fin");
-                                                                correo_delproyecto    = JOptionPane.showInputDialog("Ingrese el correo del proyecto");
-                                                                proyectosRepository.save(new Proyectos(
+                                                                fechaFin_delproyecto    = JOptionPane.showInputDialog("Ingrese la fecha de fin");
+                                                                correo_delproyecto      = JOptionPane.showInputDialog("Ingrese el correo del proyecto");
+                                                                proyectosRepository.guardar(new Proyectos(
                                                                         Id_delproyecto, nombre_delproyecto, correo_delproyecto,
                                                                         tipo_delproyecto, descripcion_delproyecto,
                                                                         fechaInicio_delproyecto, fechaFin_delproyecto, estado_delproyecto));
@@ -126,51 +126,59 @@ public class App implements CommandLineRunner {
                                                                 String hoja = "";
                                                                 for (Proyectos p : todosProyectos) {
                                                                     hoja += "------ \n"
-                                                                            + "ID: "          + p.getProyectoId()          + "\n"
-                                                                            + "nombre: "      + p.getNombre_proyecto()      + "\n"
-                                                                            + "tipo: "        + p.getTipo_proyecto()        + "\n"
-                                                                            + "descripcion: " + p.getDescripcion_proyecto() + "\n"
-                                                                            + "estado: "      + p.getEstado_proyecto()      + "\n"
+                                                                            + "ID: "           + p.getProyectoId()          + "\n"
+                                                                            + "nombre: "       + p.getNombre_proyecto()      + "\n"
+                                                                            + "tipo: "         + p.getTipo_proyecto()        + "\n"
+                                                                            + "descripcion: "  + p.getDescripcion_proyecto() + "\n"
+                                                                            + "estado: "       + p.getEstado_proyecto()      + "\n"
                                                                             + "fecha inicio: " + p.getFechaInicio_proyecto() + "\n"
-                                                                            + "fecha fin: "   + p.getFechaFin_proyecto()    + "\n";
+                                                                            + "fecha fin: "    + p.getFechaFin_proyecto()    + "\n";
                                                                 }
                                                                 JOptionPane.showMessageDialog(null, "LISTA DE PROYECTOS \n" + hoja);
                                                             }
                                                             break;
                                                         case 3:
+                                                            Id_delproyecto = JOptionPane.showInputDialog("Ingrese el ID del proyecto a buscar:");
+                                                            Proyectos proyBuscado = proyectosRepository.buscar(Id_delproyecto);
+                                                            if (proyBuscado != null) {
+                                                                JOptionPane.showMessageDialog(null, proyBuscado.traerDetalles());
+                                                            } else {
+                                                                JOptionPane.showMessageDialog(null, "Este ID no existe");
+                                                            }
+                                                            break;
+                                                        case 4:
                                                             Id_delproyecto = JOptionPane.showInputDialog("Ingrese el ID del proyecto a actualizar");
-                                                            Optional<Proyectos> proyOpt = proyectosRepository.findById(Id_delproyecto);
-                                                            if (proyOpt.isPresent()) {
-                                                                Proyectos actualizarrr = proyOpt.get();
+                                                            Proyectos actualizarrr = proyectosRepository.buscar(Id_delproyecto);
+                                                            if (actualizarrr != null) {
                                                                 actualizarrr.setNombre_proyecto(JOptionPane.showInputDialog("Ingrese el nuevo nombre"));
                                                                 actualizarrr.setTipo_proyecto(JOptionPane.showInputDialog("Ingrese el nuevo tipo"));
                                                                 actualizarrr.setDescripcion_proyecto(JOptionPane.showInputDialog("Ingrese la nueva descripcion"));
                                                                 actualizarrr.setEstado_proyecto(JOptionPane.showInputDialog("Ingrese el nuevo estado"));
                                                                 actualizarrr.setFechaInicio_proyecto(JOptionPane.showInputDialog("Ingrese la nueva fecha de inicio"));
                                                                 actualizarrr.setFechaFin_proyecto(JOptionPane.showInputDialog("Ingrese la nueva fecha de fin"));
-                                                                proyectosRepository.save(actualizarrr);
+                                                                proyectosRepository.guardar(actualizarrr);
                                                                 JOptionPane.showMessageDialog(null, "proyecto actualizado");
                                                             } else {
                                                                 JOptionPane.showMessageDialog(null, "Este ID no existe");
                                                             }
                                                             break;
-                                                        case 4:
+                                                        case 5:
                                                             Id_delproyecto = JOptionPane.showInputDialog("ID del proyecto a eliminar:");
                                                             if (proyectosRepository.existsById(Id_delproyecto)) {
-                                                                proyectosRepository.deleteById(Id_delproyecto);
+                                                                proyectosRepository.eliminar(Id_delproyecto);
                                                                 JOptionPane.showMessageDialog(null, "Proyecto eliminado");
                                                             } else {
                                                                 JOptionPane.showMessageDialog(null, "ID no encontrado");
                                                             }
                                                             break;
-                                                        case 5:
+                                                        case 6:
                                                             JOptionPane.showMessageDialog(null, "Devuelta al menu principal");
                                                             break;
                                                         default:
-                                                            JOptionPane.showMessageDialog(null, "ERROR, solo numeros del 1 al 5");
+                                                            JOptionPane.showMessageDialog(null, "ERROR, solo numeros del 1 al 6");
                                                             break;
                                                     }
-                                                } while (opcionproyectos != 5);
+                                                } while (opcionproyectos != 6);
                                                 break;
 
                                             // ── PARTICIPANTES ───────────────────
@@ -191,11 +199,11 @@ public class App implements CommandLineRunner {
                                                             if (participantesRepository.existsById(Id_delosparticipantes)) {
                                                                 JOptionPane.showMessageDialog(null, "ese ID ya existe");
                                                             } else {
-                                                                nombre_delosparticipantes  = JOptionPane.showInputDialog("Ingrese el nombre del participante:");
-                                                                ubicacion_participante     = JOptionPane.showInputDialog("Ingrese la ubicacion del participante:");
-                                                                correo_delosparticipantes  = JOptionPane.showInputDialog("Ingrese el correo del participante:");
-                                                                rol_delosparticipante      = JOptionPane.showInputDialog("Ingrese el rol del participante:");
-                                                                participantesRepository.save(new Participantes(
+                                                                nombre_delosparticipantes = JOptionPane.showInputDialog("Ingrese el nombre del participante:");
+                                                                ubicacion_participante    = JOptionPane.showInputDialog("Ingrese la ubicacion del participante:");
+                                                                correo_delosparticipantes = JOptionPane.showInputDialog("Ingrese el correo del participante:");
+                                                                rol_delosparticipante     = JOptionPane.showInputDialog("Ingrese el rol del participante:");
+                                                                participantesRepository.guardar(new Participantes(
                                                                         Id_delosparticipantes, nombre_delosparticipantes,
                                                                         ubicacion_participante, correo_delosparticipantes,
                                                                         rol_delosparticipante));
@@ -221,9 +229,8 @@ public class App implements CommandLineRunner {
                                                             break;
                                                         case 3:
                                                             Id_delosparticipantes = JOptionPane.showInputDialog("Ingrese el ID del participante que desea buscar");
-                                                            Optional<Participantes> partiOpt = participantesRepository.findById(Id_delosparticipantes);
-                                                            if (partiOpt.isPresent()) {
-                                                                Participantes buscarparti = partiOpt.get();
+                                                            Participantes buscarparti = participantesRepository.buscar(Id_delosparticipantes);
+                                                            if (buscarparti != null) {
                                                                 String hojadepapeltres = "PARTICIPANTE \n"
                                                                         + "ID: "        + buscarparti.getParticipanteId()         + "\n"
                                                                         + "nombre: "    + buscarparti.getNombre_participante()    + "\n"
@@ -237,23 +244,22 @@ public class App implements CommandLineRunner {
                                                             break;
                                                         case 4:
                                                             Id_delosparticipantes = JOptionPane.showInputDialog("Ingrese el ID del participante que desea actualizar");
-                                                            Optional<Participantes> partiActOpt = participantesRepository.findById(Id_delosparticipantes);
-                                                            if (partiActOpt.isPresent()) {
-                                                                Participantes actualizarparticipante = partiActOpt.get();
+                                                            Participantes actualizarparticipante = participantesRepository.buscar(Id_delosparticipantes);
+                                                            if (actualizarparticipante != null) {
                                                                 actualizarparticipante.setNombre_participante(JOptionPane.showInputDialog("Ingrese el nuevo nombre del participante"));
                                                                 actualizarparticipante.setUbicacion_participante(JOptionPane.showInputDialog("Ingrese la nueva ubicacion del participante"));
                                                                 actualizarparticipante.setCorreo_participante(JOptionPane.showInputDialog("Ingrese el nuevo correo del participante"));
                                                                 actualizarparticipante.setRol_participante(JOptionPane.showInputDialog("Ingrese el nuevo rol del participante"));
-                                                                participantesRepository.save(actualizarparticipante);
+                                                                participantesRepository.guardar(actualizarparticipante);
                                                                 JOptionPane.showMessageDialog(null, "Actualizacion hecha");
                                                             } else {
-                                                                JOptionPane.showMessageDialog(null, "Este ID no existe pri");
+                                                                JOptionPane.showMessageDialog(null, "Este ID no existe");
                                                             }
                                                             break;
                                                         case 5:
                                                             Id_delosparticipantes = JOptionPane.showInputDialog("Ingrese el ID del participante que desea eliminar:");
                                                             if (participantesRepository.existsById(Id_delosparticipantes)) {
-                                                                participantesRepository.deleteById(Id_delosparticipantes);
+                                                                participantesRepository.eliminar(Id_delosparticipantes);
                                                                 JOptionPane.showMessageDialog(null, "Participante eliminado exitosamente");
                                                             } else {
                                                                 JOptionPane.showMessageDialog(null, "ID no encontrado");
@@ -273,9 +279,10 @@ public class App implements CommandLineRunner {
                                                             "RECURSOS \n"
                                                             + "1. Ver todos los recursos \n"
                                                             + "2. Registrar algun recurso  \n"
-                                                            + "3. Actualizar recurso \n"
-                                                            + "4. Eliminar recurso \n"
-                                                            + "5. volver al menu principal"));
+                                                            + "3. Buscar recurso por ID \n"
+                                                            + "4. Actualizar recurso \n"
+                                                            + "5. Eliminar recurso \n"
+                                                            + "6. volver al menu principal"));
 
                                                     switch (opcionrecursos) {
                                                         case 1:
@@ -286,11 +293,11 @@ public class App implements CommandLineRunner {
                                                                 String hojadepapel = "";
                                                                 for (Recursos r : todosRecursos) {
                                                                     hojadepapel += "------\n"
-                                                                            + "ID: "         + r.getRecursoId()           + "\n"
-                                                                            + "nombre: "     + r.getNombre_delrecurso()    + "\n"
-                                                                            + "categoria: "  + r.getCategoria_delrecurso() + "\n"
-                                                                            + "estado: "     + r.getEstado_delrecurso()    + "\n"
-                                                                            + "ubicacion: "  + r.getUbicacion_delrecurso() + "\n";
+                                                                            + "ID: "        + r.getRecursoId()           + "\n"
+                                                                            + "nombre: "    + r.getNombre_delrecurso()    + "\n"
+                                                                            + "categoria: " + r.getCategoria_delrecurso() + "\n"
+                                                                            + "estado: "    + r.getEstado_delrecurso()    + "\n"
+                                                                            + "ubicacion: " + r.getUbicacion_delrecurso() + "\n";
                                                                 }
                                                                 JOptionPane.showMessageDialog(null, "LISTA DE RECURSOS \n" + hojadepapel);
                                                             }
@@ -304,44 +311,52 @@ public class App implements CommandLineRunner {
                                                                 categoria_delrecurso = JOptionPane.showInputDialog("Ingrese la categoria del recurso:");
                                                                 estado_delrecurso    = JOptionPane.showInputDialog("Ingrese el estado del recurso:");
                                                                 ubicacion_delrecurso = JOptionPane.showInputDialog("Ingrese la ubicacion del recurso:");
-                                                                recursosRepository.save(new Recursos(
+                                                                recursosRepository.guardar(new Recursos(
                                                                         Id_delrecurso, nombre_delrecurso,
                                                                         categoria_delrecurso, estado_delrecurso, ubicacion_delrecurso));
                                                                 JOptionPane.showMessageDialog(null, "Recurso registrado exitosamente");
                                                             }
                                                             break;
                                                         case 3:
-                                                            Id_delrecurso = JOptionPane.showInputDialog("Ingrese el ID del recurso que desea actualizar:");
-                                                            Optional<Recursos> recOpt = recursosRepository.findById(Id_delrecurso);
-                                                            if (recOpt.isPresent()) {
-                                                                Recursos actualizar = recOpt.get();
-                                                                actualizar.setNombre_delrecurso(JOptionPane.showInputDialog("Ingrese el nuevo nombre del recurso:"));
-                                                                actualizar.setCategoria_delrecurso(JOptionPane.showInputDialog("Ingrese la nueva categoria del recurso:"));
-                                                                actualizar.setEstado_delrecurso(JOptionPane.showInputDialog("Ingrese el nuevo estado del recurso:"));
-                                                                actualizar.setUbicacion_delrecurso(JOptionPane.showInputDialog("Ingrese la nueva ubicacion del recurso:"));
-                                                                recursosRepository.save(actualizar);
-                                                                JOptionPane.showMessageDialog(null, "Recurso actualizado exitosamente");
+                                                            Id_delrecurso = JOptionPane.showInputDialog("Ingrese el ID del recurso a buscar:");
+                                                            Recursos recBuscado = recursosRepository.buscar(Id_delrecurso);
+                                                            if (recBuscado != null) {
+                                                                JOptionPane.showMessageDialog(null, recBuscado.traerDetalles());
                                                             } else {
                                                                 JOptionPane.showMessageDialog(null, "ID no encontrado");
                                                             }
                                                             break;
                                                         case 4:
-                                                            Id_delrecurso = JOptionPane.showInputDialog("Ingrese el ID del recurso que desea eliminar:");
-                                                            if (recursosRepository.existsById(Id_delrecurso)) {
-                                                                recursosRepository.deleteById(Id_delrecurso);
-                                                                JOptionPane.showMessageDialog(null, "Recurso eliminado exitosamente");
+                                                            Id_delrecurso = JOptionPane.showInputDialog("Ingrese el ID del recurso que desea actualizar:");
+                                                            Recursos actualizar = recursosRepository.buscar(Id_delrecurso);
+                                                            if (actualizar != null) {
+                                                                actualizar.setNombre_delrecurso(JOptionPane.showInputDialog("Ingrese el nuevo nombre del recurso:"));
+                                                                actualizar.setCategoria_delrecurso(JOptionPane.showInputDialog("Ingrese la nueva categoria del recurso:"));
+                                                                actualizar.setEstado_delrecurso(JOptionPane.showInputDialog("Ingrese el nuevo estado del recurso:"));
+                                                                actualizar.setUbicacion_delrecurso(JOptionPane.showInputDialog("Ingrese la nueva ubicacion del recurso:"));
+                                                                recursosRepository.guardar(actualizar);
+                                                                JOptionPane.showMessageDialog(null, "Recurso actualizado exitosamente");
                                                             } else {
                                                                 JOptionPane.showMessageDialog(null, "ID no encontrado");
                                                             }
                                                             break;
                                                         case 5:
+                                                            Id_delrecurso = JOptionPane.showInputDialog("Ingrese el ID del recurso que desea eliminar:");
+                                                            if (recursosRepository.existsById(Id_delrecurso)) {
+                                                                recursosRepository.eliminar(Id_delrecurso);
+                                                                JOptionPane.showMessageDialog(null, "Recurso eliminado exitosamente");
+                                                            } else {
+                                                                JOptionPane.showMessageDialog(null, "ID no encontrado");
+                                                            }
+                                                            break;
+                                                        case 6:
                                                             JOptionPane.showMessageDialog(null, "Devuelta al menu principal");
                                                             break;
                                                         default:
-                                                            JOptionPane.showMessageDialog(null, "ERROR, solo pueden numero del 1 al 5");
+                                                            JOptionPane.showMessageDialog(null, "ERROR, solo pueden numero del 1 al 6");
                                                             break;
                                                     }
-                                                } while (opcionrecursos != 5);
+                                                } while (opcionrecursos != 6);
                                                 break;
 
                                             // ── PATROCINIO ──────────────────────
@@ -366,9 +381,9 @@ public class App implements CommandLineRunner {
                                                                 String listaPatrocinadores = "";
                                                                 for (Patrocinios pat : todosPatrocinadores) {
                                                                     listaPatrocinadores += "ID: " + pat.getId()
-                                                                            + " nombre: "  + pat.getNombre()
-                                                                            + " tipo: "    + pat.getTipo_patrocinador()
-                                                                            + " aporte: "  + pat.getAporte_patrocinador()
+                                                                            + " nombre: " + pat.getNombre()
+                                                                            + " tipo: "   + pat.getTipo_patrocinador()
+                                                                            + " aporte: " + pat.getAporte_patrocinador()
                                                                             + "--\n";
                                                                 }
                                                                 JOptionPane.showMessageDialog(null, "LISTA DE PATROCINADORES\n" + listaPatrocinadores);
@@ -379,12 +394,12 @@ public class App implements CommandLineRunner {
                                                             if (patrociniosRepository.existsById(Id_delpatrocinador)) {
                                                                 JOptionPane.showMessageDialog(null, "ese id ya existe");
                                                             } else {
-                                                                nombre_delpatrocinador    = JOptionPane.showInputDialog("Nombre:");
-                                                                correo_delpatrocinador    = JOptionPane.showInputDialog("Correo:");
-                                                                contacto_delpatrocinador  = JOptionPane.showInputDialog("Contacto:");
-                                                                tipo_depatrocinador       = JOptionPane.showInputDialog("Tipo:");
-                                                                aporte_delpatrocinador    = JOptionPane.showInputDialog("Aporte:");
-                                                                patrociniosRepository.save(new Patrocinios(
+                                                                nombre_delpatrocinador   = JOptionPane.showInputDialog("Nombre:");
+                                                                correo_delpatrocinador   = JOptionPane.showInputDialog("Correo:");
+                                                                contacto_delpatrocinador = JOptionPane.showInputDialog("Contacto:");
+                                                                tipo_depatrocinador      = JOptionPane.showInputDialog("Tipo:");
+                                                                aporte_delpatrocinador   = JOptionPane.showInputDialog("Aporte:");
+                                                                patrociniosRepository.guardar(new Patrocinios(
                                                                         Id_delpatrocinador, nombre_delpatrocinador, correo_delpatrocinador,
                                                                         contacto_delpatrocinador, tipo_depatrocinador, aporte_delpatrocinador));
                                                                 JOptionPane.showMessageDialog(null, "patrocinador hecho");
@@ -392,15 +407,14 @@ public class App implements CommandLineRunner {
                                                             break;
                                                         case 3:
                                                             Id_delpatrocinador = JOptionPane.showInputDialog("Ingrese el ID a actualizar:");
-                                                            Optional<Patrocinios> patrOpt = patrociniosRepository.findById(Id_delpatrocinador);
-                                                            if (patrOpt.isPresent()) {
-                                                                Patrocinios pat = patrOpt.get();
+                                                            Patrocinios pat = patrociniosRepository.buscar(Id_delpatrocinador);
+                                                            if (pat != null) {
                                                                 pat.setNombre(JOptionPane.showInputDialog("Nuevo nombre:"));
                                                                 pat.setCorreo(JOptionPane.showInputDialog("Nuevo correo:"));
                                                                 pat.setContacto_patrocinador(JOptionPane.showInputDialog("Nuevo contacto:"));
                                                                 pat.setTipo_patrocinador(JOptionPane.showInputDialog("Nuevo tipo:"));
                                                                 pat.setAporte_patrocinador(JOptionPane.showInputDialog("Nuevo aporte:"));
-                                                                patrociniosRepository.save(pat);
+                                                                patrociniosRepository.guardar(pat);
                                                                 JOptionPane.showMessageDialog(null, "actualizado");
                                                             } else {
                                                                 JOptionPane.showMessageDialog(null, "id no encontrado");
@@ -409,7 +423,7 @@ public class App implements CommandLineRunner {
                                                         case 4:
                                                             Id_delpatrocinador = JOptionPane.showInputDialog("Ingrese el id");
                                                             if (patrociniosRepository.existsById(Id_delpatrocinador)) {
-                                                                patrociniosRepository.deleteById(Id_delpatrocinador);
+                                                                patrociniosRepository.eliminar(Id_delpatrocinador);
                                                                 JOptionPane.showMessageDialog(null, "eliminado");
                                                             } else {
                                                                 JOptionPane.showMessageDialog(null, "id no encontrado");
@@ -417,9 +431,9 @@ public class App implements CommandLineRunner {
                                                             break;
                                                         case 5:
                                                             Id_delpatrocinador = JOptionPane.showInputDialog("Ingrese el ID a buscar:");
-                                                            Optional<Patrocinios> patrInfoOpt = patrociniosRepository.findById(Id_delpatrocinador);
-                                                            if (patrInfoOpt.isPresent()) {
-                                                                patrInfoOpt.get().mostrarinfo();
+                                                            Patrocinios patrInfo = patrociniosRepository.buscar(Id_delpatrocinador);
+                                                            if (patrInfo != null) {
+                                                                patrInfo.mostrarinfo();
                                                                 JOptionPane.showMessageDialog(null, "Ver consola para la información completa");
                                                             } else {
                                                                 JOptionPane.showMessageDialog(null, "id no encontrado");
@@ -427,9 +441,9 @@ public class App implements CommandLineRunner {
                                                             break;
                                                         case 6:
                                                             Id_delpatrocinador = JOptionPane.showInputDialog("Ingrese el id:");
-                                                            Optional<Patrocinios> patrRolOpt = patrociniosRepository.findById(Id_delpatrocinador);
-                                                            if (patrRolOpt.isPresent()) {
-                                                                JOptionPane.showMessageDialog(null, patrRolOpt.get().rol());
+                                                            Patrocinios patrRol = patrociniosRepository.buscar(Id_delpatrocinador);
+                                                            if (patrRol != null) {
+                                                                JOptionPane.showMessageDialog(null, patrRol.rol());
                                                             } else {
                                                                 JOptionPane.showMessageDialog(null, "id no encontrado");
                                                             }
@@ -477,12 +491,12 @@ public class App implements CommandLineRunner {
                                                             if (mantenimientoRepository.existsById(Id_mantenimientoderecursos)) {
                                                                 JOptionPane.showMessageDialog(null, "ese ID ya existe");
                                                             } else {
-                                                                nombre_mantenimientoderecursos    = JOptionPane.showInputDialog("Ingrese el nombre del objeto");
-                                                                categoria_mantenimientoderecursos = JOptionPane.showInputDialog("Ingrese la descripcion");
-                                                                estado_mantenimientoderecursos    = JOptionPane.showInputDialog("Ingrese el estado");
-                                                                ubicacion_mantenimientoderecursos = JOptionPane.showInputDialog("Ingrese la categoria");
+                                                                nombre_mantenimientoderecursos         = JOptionPane.showInputDialog("Ingrese el nombre del objeto");
+                                                                categoria_mantenimientoderecursos      = JOptionPane.showInputDialog("Ingrese la descripcion");
+                                                                estado_mantenimientoderecursos         = JOptionPane.showInputDialog("Ingrese el estado");
+                                                                ubicacion_mantenimientoderecursos      = JOptionPane.showInputDialog("Ingrese la categoria");
                                                                 fechadeingreso_mantenimientoderecursos = JOptionPane.showInputDialog("Ingrese la fecha de ingreso");
-                                                                mantenimientoRepository.save(new Mantenimientoderecursos(
+                                                                mantenimientoRepository.guardar(new Mantenimientoderecursos(
                                                                         Id_mantenimientoderecursos,
                                                                         nombre_mantenimientoderecursos,
                                                                         categoria_mantenimientoderecursos,
@@ -494,15 +508,14 @@ public class App implements CommandLineRunner {
                                                             break;
                                                         case 3:
                                                             Id_mantenimientoderecursos = JOptionPane.showInputDialog("Ingrese el ID del objeto a actualizar");
-                                                            Optional<Mantenimientoderecursos> mantOpt = mantenimientoRepository.findById(Id_mantenimientoderecursos);
-                                                            if (mantOpt.isPresent()) {
-                                                                Mantenimientoderecursos cambiar = mantOpt.get();
+                                                            Mantenimientoderecursos cambiar = mantenimientoRepository.buscar(Id_mantenimientoderecursos);
+                                                            if (cambiar != null) {
                                                                 cambiar.setNombre_mantenimientorecursos(JOptionPane.showInputDialog("Ingrese el nuevo nombre"));
                                                                 cambiar.setCategoria_mantenimientorecursos(JOptionPane.showInputDialog("Ingrese la nueva descripcion"));
                                                                 cambiar.setEstado_mantenimientorecursos(JOptionPane.showInputDialog("Ingrese el nuevo estado"));
                                                                 cambiar.setUbicacion_mantenimientorecursos(JOptionPane.showInputDialog("Ingrese la nueva categoria"));
                                                                 cambiar.setFechadeingreso_mantenimientorecursos(JOptionPane.showInputDialog("Ingrese la nueva fecha de ingreso"));
-                                                                mantenimientoRepository.save(cambiar);
+                                                                mantenimientoRepository.guardar(cambiar);
                                                                 JOptionPane.showMessageDialog(null, "objeto actualizado");
                                                             } else {
                                                                 JOptionPane.showMessageDialog(null, "Este ID no existe");
@@ -511,7 +524,7 @@ public class App implements CommandLineRunner {
                                                         case 4:
                                                             Id_mantenimientoderecursos = JOptionPane.showInputDialog("Ingrese el ID del objeto a eliminar ");
                                                             if (mantenimientoRepository.existsById(Id_mantenimientoderecursos)) {
-                                                                mantenimientoRepository.deleteById(Id_mantenimientoderecursos);
+                                                                mantenimientoRepository.eliminar(Id_mantenimientoderecursos);
                                                                 JOptionPane.showMessageDialog(null, "objeto eliminado");
                                                             } else {
                                                                 JOptionPane.showMessageDialog(null, "ID no encontrado");
@@ -558,7 +571,7 @@ public class App implements CommandLineRunner {
                     correo_delregistro     = JOptionPane.showInputDialog("Ingrese su correo:");
                     Id_delregistro         = JOptionPane.showInputDialog("Ingrese su ID:");
                     contraseña_delregistro = JOptionPane.showInputDialog("Ingrese su contraseña:");
-                    verificacionRepository.save(new Verificacion(
+                    verificacionRepository.guardar(new Verificacion(
                             Id_delregistro, contraseña_delregistro,
                             telefono_delregistro, correo_delregistro, nombre_delregistro));
                     JOptionPane.showMessageDialog(null, "registrado exitosamente");
