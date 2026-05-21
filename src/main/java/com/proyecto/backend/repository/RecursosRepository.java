@@ -3,9 +3,9 @@ package com.proyecto.backend.repository;
 import com.proyecto.backend.model.Funcionescrud;
 import com.proyecto.backend.model.Recursos;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
-@Repository
+@RepositoryRestResource(path = "recursos", collectionResourceRel = "recursos")
 public interface RecursosRepository extends JpaRepository<Recursos, String>, Funcionescrud<Recursos> {
 
     @Override

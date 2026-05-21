@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema Institucional Académico</title>
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <!-- Estilos propios -->
+  <link href="/css/styles.css" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ══════════════════════════ LOGIN ══════════════════════════ -->
+  <div id="loginPage" class="d-flex align-items-center justify-content-center">
+    <div class="card p-2" id="loginCard">
+      <div class="card-body p-5">
+
+        <!-- Ícono + título -->
+        <div class="text-center mb-4">
+          <i class="bi bi-building login-icon"></i>
+          <h4 class="fw-bold mt-2 mb-1">Sistema Institucional</h4>
+          <p class="text-muted small mb-0" id="loginSubtitle">Ingresa tus credenciales para continuar</p>
+        </div>
+
+        <!-- Tabs: Iniciar sesión / Registrarse -->
+        <ul class="nav nav-pills nav-fill mb-4" id="authTabs">
+          <li class="nav-item">
+            <button class="nav-link active" id="tabLogin" onclick="showTab('login')">
+              <i class="bi bi-box-arrow-in-right me-1"></i>Iniciar sesión
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" id="tabRegister" onclick="showTab('register')">
+              <i class="bi bi-person-plus me-1"></i>Registrarse
+            </button>
+          </li>
+        </ul>
+
+        <!-- Alerta de error / éxito -->
+        <div class="alert py-2 small d-none" id="loginErr"></div>
+
+        <!-- ── FORMULARIO LOGIN ── -->
+        <div id="formLogin">
+          <div class="mb-3">
+            <label class="form-label fw-semibold small">ID de usuario</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-person"></i></span>
+              <input type="text" class="form-control" id="lId"
+                     placeholder="Ej: U001" autocomplete="username">
+            </div>
+          </div>
+          <div class="mb-4">
+            <label class="form-label fw-semibold small">Contraseña</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-lock"></i></span>
+              <input type="password" class="form-control" id="lPass"
+                     placeholder="••••••••" autocomplete="current-password">
+            </div>
+          </div>
+          <button class="btn btn-primary w-100 fw-semibold py-2" id="btnLogin" onclick="login()">
+            <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar sesión
+          </button>
+        </div>
+
+        <!-- ── FORMULARIO REGISTRO ── -->
+        <div id="formRegister" style="display:none">
+          <div class="mb-3">
+            <label class="form-label fw-semibold small">ID <span class="text-danger">*</span></label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-hash"></i></span>
+              <input type="text" class="form-control" id="rId" placeholder="Ej: U001">
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold small">Nombre completo <span class="text-danger">*</span></label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-person"></i></span>
+              <input type="text" class="form-control" id="rNombre" placeholder="Tu nombre">
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold small">Correo</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+              <input type="email" class="form-control" id="rCorreo" placeholder="correo@ejemplo.com">
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold small">Teléfono</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+              <input type="text" class="form-control" id="rTelefono" placeholder="3001234567">
+            </div>
+          </div>
+          <div class="mb-4">
+            <label class="form-label fw-semibold small">Contraseña <span class="text-danger">*</span></label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-lock"></i></span>
+              <input type="password" class="form-control" id="rPass" placeholder="••••••••">
+            </div>
+          </div>
+          <button class="btn btn-success w-100 fw-semibold py-2" id="btnRegister" onclick="register()">
+            <i class="bi bi-person-check me-2"></i>Crear cuenta
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════ DASHBOARD ════════════════════════ -->
+  <div id="dashboard" style="display:none">
+
+    <!-- Navbar / Header -->
+    <nav class="app-navbar navbar px-3 d-flex align-items-center justify-content-between">
+      <span class="navbar-brand mb-0">
+        <i class="bi bi-building me-2"></i>Sistema Institucional Académico
+      </span>
+      <div class="d-flex align-items-center gap-3">
+        <span class="small text-muted">
+          Bienvenido, <strong id="hdrName" class="text-dark"></strong>
+        </span>
+        <button class="btn btn-outline-secondary btn-sm" onclick="logout()">
+          <i class="bi bi-box-arrow-left me-1"></i>Cerrar sesión
+        </button>
+      </div>
+    </nav>
+
+    <!-- Sidebar + Contenido principal -->
+    <div class="d-flex">
+
+      <nav id="sidebar">
+        <div id="sidebarItems" class="pt-2 pb-3"></div>
+      </nav>
+
+      <main id="mainContent" class="flex-grow-1"></main>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════ MODAL ══════════════════════════ -->
+  <div class="modal fade" id="crudModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold" id="modalTitle"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body" id="modalBody"></div>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button class="btn btn-primary fw-semibold" id="btnSave" onclick="saveRecord()">
+            <i class="bi bi-save me-1"></i>Guardar
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenedor de toasts -->
+  <div id="toastBox"></div>
+
+  <!-- Bootstrap 5 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- GSAP + ScrollTrigger -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <!-- Lógica de la app -->
+  <script src="/js/app.js"></script>
+
+</body>
+</html>
