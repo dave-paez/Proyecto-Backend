@@ -1,0 +1,399 @@
+/* ═══════════════════════════════════════════════
+   VARIABLES
+═══════════════════════════════════════════════ */
+:root {
+  --sidebar-bg:    #1e293b;
+  --sidebar-txt:   #e2e8f0;
+  --sidebar-act:   #3b82f6;
+  --brand:         #1d4ed8;
+  --brand-hover:   #1e40af;
+  --surface:       #ffffff;
+  --bg:            #f1f5f9;
+  --border:        #e2e8f0;
+  --text:          #0f172a;
+  --muted:         #64748b;
+  --danger:        #ef4444;
+  --success:       #10b981;
+  --shadow:        0 1px 3px rgba(0,0,0,.08);
+  --shadow-lg:     0 10px 25px rgba(0,0,0,.12);
+  --radius:        12px;
+}
+
+/* ═══════════════════════════════════════════════
+   GLOBAL
+═══════════════════════════════════════════════ */
+* { box-sizing: border-box; }
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* ═══════════════════════════════════════════════
+   LOGIN
+═══════════════════════════════════════════════ */
+#loginPage {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f172a 0%, #1d4ed8 100%);
+  /* Permite scroll cuando el formulario de registro es más alto que el viewport */
+  align-items: flex-start !important;
+  padding: 40px 16px;
+  overflow-y: auto;
+}
+
+#loginCard {
+  border: none;
+  border-radius: 18px;
+  box-shadow: var(--shadow-lg);
+  width: 420px;
+  max-width: 100%;
+  /* Centrar horizontalmente dentro del flex container */
+  margin: auto;
+}
+
+.login-icon {
+  font-size: 2.5rem;
+  color: var(--brand);
+}
+
+/* ═══════════════════════════════════════════════
+   DASHBOARD LAYOUT
+═══════════════════════════════════════════════ */
+#dashboard {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.dashboard-body {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* Header / Navbar */
+.app-navbar {
+  height: 58px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  z-index: 50;
+  flex-shrink: 0;
+}
+
+.app-navbar .navbar-brand {
+  color: var(--brand) !important;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: -.01em;
+}
+
+/* ═══════════════════════════════════════════════
+   SIDEBAR
+═══════════════════════════════════════════════ */
+#sidebar {
+  width: 220px;
+  min-width: 220px;
+  background: var(--sidebar-bg);
+  overflow-y: auto;
+  height: 100%;
+  flex-shrink: 0;
+}
+
+.nav-item-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 18px;
+  color: var(--sidebar-txt);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  border-left: 3px solid transparent;
+  transition: all .15s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+.nav-item-link:hover {
+  color: #fff;
+  background: rgba(255,255,255,.06);
+  text-decoration: none;
+}
+
+.nav-item-link.active {
+  color: #fff;
+  background: rgba(59,130,246,.14);
+  border-left-color: var(--sidebar-act);
+}
+
+.nav-item-link i {
+  font-size: 15px;
+  width: 18px;
+  text-align: center;
+}
+
+#sidebar::-webkit-scrollbar { width: 4px; }
+#sidebar::-webkit-scrollbar-thumb { background: #334155; border-radius: 2px; }
+
+/* ═══════════════════════════════════════════════
+   MAIN CONTENT
+═══════════════════════════════════════════════ */
+#mainContent {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  height: 100%;
+}
+
+#mainContent::-webkit-scrollbar { width: 6px; }
+#mainContent::-webkit-scrollbar-track { background: transparent; }
+#mainContent::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+/* ═══════════════════════════════════════════════
+   CONTENT CARD
+═══════════════════════════════════════════════ */
+.content-card {
+  border: none !important;
+  border-radius: var(--radius) !important;
+  box-shadow: var(--shadow) !important;
+  overflow: hidden;
+}
+
+/* ═══════════════════════════════════════════════
+   PAGE HEADER
+═══════════════════════════════════════════════ */
+.page-title {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -.02em;
+}
+
+.page-count {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* ═══════════════════════════════════════════════
+   TABLE
+═══════════════════════════════════════════════ */
+.app-table thead th {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--muted);
+  background: #f8fafc;
+  border-bottom: 2px solid var(--border) !important;
+  padding: 10px 14px;
+  white-space: nowrap;
+}
+
+.app-table tbody td {
+  padding: 11px 14px;
+  vertical-align: middle;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border) !important;
+}
+
+.app-table tbody tr:last-child td { border-bottom: none !important; }
+.app-table tbody tr { transition: background .1s; }
+.app-table tbody tr:hover { background-color: #f8fafc; }
+
+/* Filas animadas por GSAP */
+.tbl-row { opacity: 0; transform: translateY(10px); }
+
+/* ═══════════════════════════════════════════════
+   STATUS BADGES
+═══════════════════════════════════════════════ */
+.status-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.badge-green  { background: #d1fae5; color: #065f46; }
+.badge-red    { background: #fee2e2; color: #991b1b; }
+.badge-blue   { background: #dbeafe; color: #1e40af; }
+.badge-gray   { background: #e2e8f0; color: #475569; }
+
+/* ═══════════════════════════════════════════════
+   EMPTY / LOADING STATES
+═══════════════════════════════════════════════ */
+.state-box {
+  text-align: center;
+  padding: 60px 24px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.state-box i {
+  display: block;
+  font-size: 40px;
+  margin-bottom: 14px;
+  opacity: .6;
+}
+
+/* Loading spinner */
+.spin-ring {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  border: 3px solid var(--border);
+  border-top-color: var(--brand);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ═══════════════════════════════════════════════
+   MODAL
+═══════════════════════════════════════════════ */
+#crudModal .modal-content {
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgba(0,0,0,.2);
+}
+
+#crudModal .modal-header {
+  border-bottom: 1px solid var(--border);
+  padding: 18px 22px;
+}
+
+#crudModal .modal-body {
+  padding: 22px;
+}
+
+#crudModal .modal-footer {
+  border-top: 1px solid var(--border);
+  padding: 14px 22px;
+}
+
+/* Form field animation targets */
+.form-field-item { opacity: 0; transform: translateY(8px); }
+
+/* ═══════════════════════════════════════════════
+   BUTTONS
+═══════════════════════════════════════════════ */
+.btn-action {
+  padding: 5px 10px;
+  font-size: 13px;
+  border-radius: 7px;
+}
+
+/* ═══════════════════════════════════════════════
+   TOAST CONTAINER
+═══════════════════════════════════════════════ */
+#toastBox {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+
+#toastBox .toast {
+  pointer-events: all;
+  min-width: 260px;
+  max-width: 340px;
+  border: none;
+  border-radius: 10px;
+  box-shadow: var(--shadow-lg);
+  opacity: 0; /* GSAP animates this in */
+}
+
+/* ═══════════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════════ */
+.app-footer {
+  background: var(--sidebar-bg);
+  color: var(--sidebar-txt);
+  font-size: 12px;
+  padding: 0 24px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  border-top: 1px solid rgba(255,255,255,.07);
+  letter-spacing: .01em;
+}
+
+.app-footer i {
+  color: var(--sidebar-act);
+}
+
+/* ═══════════════════════════════════════════════
+   BARRA DE BÚSQUEDA
+═══════════════════════════════════════════════ */
+.search-bar-wrap .input-group {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.search-addon {
+  background: #fff;
+  border-right: none;
+  color: var(--muted);
+}
+
+.search-input {
+  border-left: none;
+  background: #fff;
+}
+
+.search-input:focus {
+  box-shadow: none;
+  border-color: #dee2e6;
+}
+
+.search-bar-wrap .btn-outline-secondary {
+  border-color: #dee2e6;
+  color: var(--muted);
+}
+
+.search-bar-wrap .btn-outline-secondary:hover {
+  background: var(--bg);
+  color: var(--brand);
+}
+
+/* ═══════════════════════════════════════════════
+   MODAL CONFIRMAR ELIMINAR
+═══════════════════════════════════════════════ */
+.delete-modal-content {
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgba(0,0,0,.18);
+}
+
+.delete-icon-wrap {
+  font-size: 2.8rem;
+  line-height: 1;
+}
+
+/* ═══════════════════════════════════════════════
+   VALIDACIÓN DE FORMULARIOS
+═══════════════════════════════════════════════ */
+.form-control.is-invalid {
+  border-color: var(--danger);
+  background-image: none;
+  box-shadow: 0 0 0 2px rgba(239,68,68,.15);
+}
+
+/* Icono en el título de la sección */
+.page-title .bi {
+  font-size: 17px;
+  vertical-align: middle;
+}

@@ -7,9 +7,9 @@ import jakarta.persistence.*;
 @AttributeOverrides({
     @AttributeOverride(name = "id",        column = @Column(name = "MMTO_ID")),
     @AttributeOverride(name = "nombre",    column = @Column(name = "NOMBRE_TECNICO", nullable = false)),
-    @AttributeOverride(name = "categoria", column = @Column(name = "DESCRIPCION")),
-    @AttributeOverride(name = "estado",    column = @Column(name = "DESCRIPCION", insertable = false, updatable = false)),
-    @AttributeOverride(name = "ubicacion", column = @Column(name = "NOMBRE_TECNICO", insertable = false, updatable = false))
+    @AttributeOverride(name = "categoria", column = @Column(name = "DESCRIPCION",    nullable = false)),
+    @AttributeOverride(name = "estado",    column = @Column(name = "ESTADO",         nullable = false)),
+    @AttributeOverride(name = "ubicacion", column = @Column(name = "CATEGORIA",      nullable = false))
 })
 public class Mantenimientoderecursos extends RecursoBase {
 
@@ -17,7 +17,7 @@ public class Mantenimientoderecursos extends RecursoBase {
     private String fechadeingreso_mantenimientorecursos;
 
     @Column(name = "RECURSO_ID")
-    private Integer recursoId;
+    private String recursoId;
 
     protected Mantenimientoderecursos() {
         super(null, null, null, null, null);

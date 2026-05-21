@@ -1,10 +1,10 @@
 package com.proyecto.backend.model;
 
-public interface Funcionescrud {
+public interface Funcionescrud<T> {
 
-    void guardar(RecursoBase recurso);
+    void guardar(T entidad);
 
-    RecursoBase buscar(String id);
+    T buscar(String id);
 
     void eliminar(String id);
 }

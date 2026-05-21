@@ -14,7 +14,7 @@ public abstract class Persona {
   @Column(name = "NOMBRE", nullable = false)
   protected String nombre;
 
-  @Transient
+  @Column(name = "CORREO")
   protected String correo;
 
   public Persona() {

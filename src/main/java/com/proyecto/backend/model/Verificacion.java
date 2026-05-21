@@ -1,9 +1,20 @@
 package com.proyecto.backend.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "USUARIOS")
+@AttributeOverride(name = "id", column = @Column(name = "USUARIO_ID"))
 public class Verificacion extends Persona {
 
+    @Column(name = "CONTRASENA")
     private String contraseña_personaladiministrativo;
+
+    @Column(name = "TELEFONO")
     private String telefono_personaladministrativo;
+
+    protected Verificacion() {
+    }
 
     public Verificacion(String id, String contraseña, String telefono, String correo, String nombre) {
         super(id, nombre, correo);

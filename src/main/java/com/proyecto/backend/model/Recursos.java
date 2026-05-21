@@ -11,7 +11,7 @@ public class Recursos extends RecursoBase {
     private String fechaIngreso;
 
     @Column(name = "PROYECTO_ID")
-    private Integer proyectoId;
+    private String proyectoId;
 
     protected Recursos() {
         super(null, null, null, null, null);
