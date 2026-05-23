@@ -1,12 +1,12 @@
 package com.proyecto.backend.repository;
 
-import com.proyecto.backend.model.Funcionescrud;
+import com.proyecto.backend.model.FuncionesCrud;
 import com.proyecto.backend.model.Recursos;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource(path = "recursos", collectionResourceRel = "recursos")
-public interface RecursosRepository extends JpaRepository<Recursos, String>, Funcionescrud<Recursos> {
+public interface RecursosRepository extends JpaRepository<Recursos, String>, FuncionesCrud<Recursos> {
 
     @Override
     default void guardar(Recursos entidad) {

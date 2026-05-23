@@ -1,6 +1,6 @@
 package com.proyecto.backend.model;
 
-public interface Funcionescrud<T> {
+public interface FuncionesCrud<T> {
 
     void guardar(T entidad);
 
