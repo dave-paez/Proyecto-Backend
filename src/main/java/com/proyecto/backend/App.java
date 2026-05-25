@@ -1,13 +1,24 @@
 package com.proyecto.backend;
 
-import com.proyecto.backend.model.*;
-import com.proyecto.backend.repository.*;
+import java.util.List;
+import java.util.Scanner;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Scanner;
+import com.proyecto.backend.model.Mantenimientoderecursos;
+import com.proyecto.backend.model.Participantes;
+import com.proyecto.backend.model.Patrocinios;
+import com.proyecto.backend.model.Proyectos;
+import com.proyecto.backend.model.Recursos;
+import com.proyecto.backend.model.Verificacion;
+import com.proyecto.backend.repository.MantenimientoRepository;
+import com.proyecto.backend.repository.ParticipantesRepository;
+import com.proyecto.backend.repository.PatrociniosRepository;
+import com.proyecto.backend.repository.ProyectosRepository;
+import com.proyecto.backend.repository.RecursosRepository;
+import com.proyecto.backend.repository.VerificacionRepository;
 
 @Component
 public class App implements CommandLineRunner {
@@ -37,7 +48,7 @@ public class App implements CommandLineRunner {
             System.out.println("║  4. Recursos                         ║");
             System.out.println("║  5. Mantenimiento de Recursos        ║");
             System.out.println("║  6. Usuarios                         ║");
-            System.out.println("║  0. Salir                            ║");
+            System.out.println("║  7. Salir                            ║");
             System.out.println("╚══════════════════════════════════════╝");
             System.out.print("Selecciona una opcion: ");
             opcion = leerInt();
@@ -49,10 +60,10 @@ public class App implements CommandLineRunner {
                 case 4 -> menuRecursos();
                 case 5 -> menuMantenimiento();
                 case 6 -> menuUsuarios();
-                case 0 -> System.out.println("\nCerrando sistema. Hasta luego.");
+                case 7 -> System.out.println("\nCerrando sistema. Hasta luego.");
                 default -> System.out.println("Opcion invalida, intenta de nuevo.");
             }
-        } while (opcion != 0);
+        } while (opcion != 7);
     }
 
     // ══════════════════════════════════════════════════════
