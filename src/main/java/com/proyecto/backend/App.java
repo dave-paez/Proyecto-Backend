@@ -90,7 +90,7 @@ public class App implements CommandLineRunner {
                 case 2 -> {
                     System.out.print("ID del proyecto: ");
                     String id = sc.nextLine().trim();
-                    Proyectos p = proyectosRepo.buscar(id);
+                    Proyectos p = proyectosRepo.findById(id).orElse(null);
                     if (p != null) System.out.println(p.traerDetalles());
                     else System.out.println("Proyecto no encontrado.");
                 }
@@ -99,9 +99,13 @@ public class App implements CommandLineRunner {
                 case 5 -> {
                     System.out.print("ID del proyecto a eliminar: ");
                     String id = sc.nextLine().trim();
-                    if (proyectosRepo.buscar(id) != null) {
-                        proyectosRepo.eliminar(id);
-                        System.out.println("Proyecto eliminado correctamente.");
+                    if (proyectosRepo.findById(id).isPresent()) {
+                        try {
+                            proyectosRepo.deleteById(id);
+                            System.out.println("Proyecto eliminado correctamente.");
+                        } catch (Exception e) {
+                            System.out.println("Error al eliminar el proyecto: " + e.getMessage());
+                        }
                     } else System.out.println("Proyecto no encontrado.");
                 }
             }
@@ -117,14 +121,18 @@ public class App implements CommandLineRunner {
         System.out.print("Fecha inicio : "); String ini  = sc.nextLine().trim();
         System.out.print("Fecha fin    : "); String fin  = sc.nextLine().trim();
         System.out.print("Estado       : "); String est  = sc.nextLine().trim();
-        proyectosRepo.guardar(new Proyectos(id, nom, cor, tipo, desc, ini, fin, est));
-        System.out.println("Proyecto creado correctamente.");
+        try {
+            proyectosRepo.save(new Proyectos(id, nom, cor, tipo, desc, ini, fin, est));
+            System.out.println("Proyecto creado correctamente.");
+        } catch (Exception e) {
+            System.out.println("Error al crear el proyecto: " + e.getMessage());
+        }
     }
 
     private void actualizarProyecto() {
         System.out.print("ID del proyecto a actualizar: ");
         String id = sc.nextLine().trim();
-        Proyectos p = proyectosRepo.buscar(id);
+        Proyectos p = proyectosRepo.findById(id).orElse(null);
         if (p == null) { System.out.println("Proyecto no encontrado."); return; }
         System.out.print("Nuevo nombre    [" + p.getNombre() + "] (Enter para dejar igual): ");
         String v = sc.nextLine().trim();
@@ -135,8 +143,12 @@ public class App implements CommandLineRunner {
         System.out.print("Nueva fecha fin [" + p.getFechaFin_proyecto() + "] (Enter para dejar igual): ");
         v = sc.nextLine().trim();
         if (!v.isEmpty()) p.setFechaFin_proyecto(v);
-        proyectosRepo.guardar(p);
-        System.out.println("Proyecto actualizado correctamente.");
+        try {
+            proyectosRepo.save(p);
+            System.out.println("Proyecto actualizado correctamente.");
+        } catch (Exception e) {
+            System.out.println("Error al actualizar el proyecto: " + e.getMessage());
+        }
     }
 
     // ══════════════════════════════════════════════════════
@@ -156,26 +168,40 @@ public class App implements CommandLineRunner {
             op = leerInt();
             switch (op) {
                 case 1 -> {
-                    List<Participantes> lista = participantesRepo.findAll();
-                    if (lista.isEmpty()) System.out.println("No hay participantes registrados.");
-                    else lista.forEach(p -> { p.mostrarinfo(); System.out.println(); });
+                    try {
+                        List<Participantes> lista = participantesRepo.findAll();
+                        if (lista.isEmpty()) System.out.println("No hay participantes registrados.");
+                        else lista.forEach(p -> { p.mostrarinfo(); System.out.println(); });
+                    } catch (Exception e) {
+                        System.out.println("Error al listar participantes: " + e.getMessage());
+                    }
                 }
                 case 2 -> {
                     System.out.print("ID del participante: ");
                     String id = sc.nextLine().trim();
-                    Participantes p = participantesRepo.buscar(id);
-                    if (p != null) p.mostrarinfo();
-                    else System.out.println("Participante no encontrado.");
+                    try {
+                        Participantes p = participantesRepo.findById(id).orElse(null);
+                        if (p != null) p.mostrarinfo();
+                        else System.out.println("Participante no encontrado.");
+                    } catch (Exception e) {
+                        System.out.println("Error al buscar participante: " + e.getMessage());
+                    }
                 }
                 case 3 -> crearParticipante();
                 case 4 -> actualizarParticipante();
                 case 5 -> {
                     System.out.print("ID del participante a eliminar: ");
                     String id = sc.nextLine().trim();
-                    if (participantesRepo.buscar(id) != null) {
-                        participantesRepo.eliminar(id);
-                        System.out.println("Participante eliminado correctamente.");
-                    } else System.out.println("Participante no encontrado.");
+                    try {
+                        if (participantesRepo.findById(id).isPresent()) {
+                            participantesRepo.deleteById(id);
+                            System.out.println("Participante eliminado correctamente.");
+                        } else {
+                            System.out.println("Participante no encontrado.");
+                        }
+                    } catch (Exception e) {
+                        System.out.println("Error al eliminar el participante: " + e.getMessage());
+                    }
                 }
             }
         } while (op != 0);
@@ -187,26 +213,34 @@ public class App implements CommandLineRunner {
         System.out.print("Correo    : "); String cor  = sc.nextLine().trim();
         System.out.print("Ubicacion : "); String ubic = sc.nextLine().trim();
         System.out.print("Rol       : "); String rol  = sc.nextLine().trim();
-        participantesRepo.guardar(new Participantes(id, nom, ubic, cor, rol));
-        System.out.println("Participante creado correctamente.");
+        try {
+            participantesRepo.save(new Participantes(id, nom, ubic, cor, rol));
+            System.out.println("Participante creado correctamente.");
+        } catch (Exception e) {
+            System.out.println("Error al crear el participante: " + e.getMessage());
+        }
     }
 
     private void actualizarParticipante() {
         System.out.print("ID del participante a actualizar: ");
         String id = sc.nextLine().trim();
-        Participantes p = participantesRepo.buscar(id);
-        if (p == null) { System.out.println("Participante no encontrado."); return; }
-        System.out.print("Nuevo nombre    [" + p.getNombre_participante() + "]: ");
-        String v = sc.nextLine().trim();
-        if (!v.isEmpty()) p.setNombre_participante(v);
-        System.out.print("Nuevo rol       [" + p.getRol_participante() + "]: ");
-        v = sc.nextLine().trim();
-        if (!v.isEmpty()) p.setRol_participante(v);
-        System.out.print("Nueva ubicacion [" + p.getUbicacion_participante() + "]: ");
-        v = sc.nextLine().trim();
-        if (!v.isEmpty()) p.setUbicacion_participante(v);
-        participantesRepo.guardar(p);
-        System.out.println("Participante actualizado correctamente.");
+        try {
+            Participantes p = participantesRepo.findById(id).orElse(null);
+            if (p == null) { System.out.println("Participante no encontrado."); return; }
+            System.out.print("Nuevo nombre    [" + p.getNombre_participante() + "]: ");
+            String v = sc.nextLine().trim();
+            if (!v.isEmpty()) p.setNombre_participante(v);
+            System.out.print("Nuevo rol       [" + p.getRol_participante() + "]: ");
+            v = sc.nextLine().trim();
+            if (!v.isEmpty()) p.setRol_participante(v);
+            System.out.print("Nueva ubicacion [" + p.getUbicacion_participante() + "]: ");
+            v = sc.nextLine().trim();
+            if (!v.isEmpty()) p.setUbicacion_participante(v);
+            participantesRepo.save(p);
+            System.out.println("Participante actualizado correctamente.");
+        } catch (Exception e) {
+            System.out.println("Error al actualizar el participante: " + e.getMessage());
+        }
     }
 
     // ══════════════════════════════════════════════════════
@@ -233,7 +267,7 @@ public class App implements CommandLineRunner {
                 case 2 -> {
                     System.out.print("ID del patrocinador: ");
                     String id = sc.nextLine().trim();
-                    Patrocinios p = patrociniosRepo.buscar(id);
+                    Patrocinios p = patrociniosRepo.findById(id).orElse(null);
                     if (p != null) p.mostrarinfo();
                     else System.out.println("Patrocinio no encontrado.");
                 }
@@ -242,9 +276,13 @@ public class App implements CommandLineRunner {
                 case 5 -> {
                     System.out.print("ID del patrocinio a eliminar: ");
                     String id = sc.nextLine().trim();
-                    if (patrociniosRepo.buscar(id) != null) {
-                        patrociniosRepo.eliminar(id);
-                        System.out.println("Patrocinio eliminado correctamente.");
+                    if (patrociniosRepo.findById(id).isPresent()) {
+                        try {
+                            patrociniosRepo.deleteById(id);
+                            System.out.println("Patrocinio eliminado correctamente.");
+                        } catch (Exception e) {
+                            System.out.println("Error al eliminar el patrocinio: " + e.getMessage());
+                        }
                     } else System.out.println("Patrocinio no encontrado.");
                 }
             }
@@ -258,14 +296,18 @@ public class App implements CommandLineRunner {
         System.out.print("Contacto : "); String cont   = sc.nextLine().trim();
         System.out.print("Tipo     : "); String tipo   = sc.nextLine().trim();
         System.out.print("Aporte   : "); String aporte = sc.nextLine().trim();
-        patrociniosRepo.guardar(new Patrocinios(id, nom, cor, cont, tipo, aporte));
-        System.out.println("Patrocinio creado correctamente.");
+        try {
+            patrociniosRepo.save(new Patrocinios(id, nom, cor, cont, tipo, aporte));
+            System.out.println("Patrocinio creado correctamente.");
+        } catch (Exception e) {
+            System.out.println("Error al crear el patrocinio: " + e.getMessage());
+        }
     }
 
     private void actualizarPatrocinio() {
         System.out.print("ID del patrocinio a actualizar: ");
         String id = sc.nextLine().trim();
-        Patrocinios p = patrociniosRepo.buscar(id);
+        Patrocinios p = patrociniosRepo.findById(id).orElse(null);
         if (p == null) { System.out.println("Patrocinio no encontrado."); return; }
         System.out.print("Nuevo aporte [" + p.getAporte_patrocinador() + "]: ");
         String v = sc.nextLine().trim();
@@ -273,8 +315,12 @@ public class App implements CommandLineRunner {
         System.out.print("Nuevo tipo   [" + p.getTipo_patrocinador() + "]: ");
         v = sc.nextLine().trim();
         if (!v.isEmpty()) p.setTipo_patrocinador(v);
-        patrociniosRepo.guardar(p);
-        System.out.println("Patrocinio actualizado correctamente.");
+        try {
+            patrociniosRepo.save(p);
+            System.out.println("Patrocinio actualizado correctamente.");
+        } catch (Exception e) {
+            System.out.println("Error al actualizar el patrocinio: " + e.getMessage());
+        }
     }
 
     // ══════════════════════════════════════════════════════
@@ -301,7 +347,7 @@ public class App implements CommandLineRunner {
                 case 2 -> {
                     System.out.print("ID del recurso: ");
                     String id = sc.nextLine().trim();
-                    Recursos r = recursosRepo.buscar(id);
+                    Recursos r = recursosRepo.findById(id).orElse(null);
                     if (r != null) System.out.println(r.traerDetalles());
                     else System.out.println("Recurso no encontrado.");
                 }
@@ -310,9 +356,13 @@ public class App implements CommandLineRunner {
                 case 5 -> {
                     System.out.print("ID del recurso a eliminar: ");
                     String id = sc.nextLine().trim();
-                    if (recursosRepo.buscar(id) != null) {
-                        recursosRepo.eliminar(id);
-                        System.out.println("Recurso eliminado correctamente.");
+                    if (recursosRepo.findById(id).isPresent()) {
+                        try {
+                            recursosRepo.deleteById(id);
+                            System.out.println("Recurso eliminado correctamente.");
+                        } catch (Exception e) {
+                            System.out.println("Error al eliminar el recurso: " + e.getMessage());
+                        }
                     } else System.out.println("Recurso no encontrado.");
                 }
             }
@@ -325,14 +375,18 @@ public class App implements CommandLineRunner {
         System.out.print("Categoria : "); String cat  = sc.nextLine().trim();
         System.out.print("Estado    : "); String est  = sc.nextLine().trim();
         System.out.print("Ubicacion : "); String ubic = sc.nextLine().trim();
-        recursosRepo.guardar(new Recursos(id, nom, cat, est, ubic));
-        System.out.println("Recurso creado correctamente.");
+        try {
+            recursosRepo.save(new Recursos(id, nom, cat, est, ubic));
+            System.out.println("Recurso creado correctamente.");
+        } catch (Exception e) {
+            System.out.println("Error al crear el recurso: " + e.getMessage());
+        }
     }
 
     private void actualizarRecurso() {
         System.out.print("ID del recurso a actualizar: ");
         String id = sc.nextLine().trim();
-        Recursos r = recursosRepo.buscar(id);
+        Recursos r = recursosRepo.findById(id).orElse(null);
         if (r == null) { System.out.println("Recurso no encontrado."); return; }
         System.out.print("Nuevo estado    [" + r.getEstado_delrecurso() + "]: ");
         String v = sc.nextLine().trim();
@@ -340,8 +394,12 @@ public class App implements CommandLineRunner {
         System.out.print("Nueva ubicacion [" + r.getUbicacion_delrecurso() + "]: ");
         v = sc.nextLine().trim();
         if (!v.isEmpty()) r.setUbicacion_delrecurso(v);
-        recursosRepo.guardar(r);
-        System.out.println("Recurso actualizado correctamente.");
+        try {
+            recursosRepo.save(r);
+            System.out.println("Recurso actualizado correctamente.");
+        } catch (Exception e) {
+            System.out.println("Error al actualizar el recurso: " + e.getMessage());
+        }
     }
 
     // ══════════════════════════════════════════════════════
@@ -368,7 +426,7 @@ public class App implements CommandLineRunner {
                 case 2 -> {
                     System.out.print("ID del mantenimiento: ");
                     String id = sc.nextLine().trim();
-                    Mantenimientoderecursos m = mantenimientoRepo.buscar(id);
+                    Mantenimientoderecursos m = mantenimientoRepo.findById(id).orElse(null);
                     if (m != null) System.out.println(m.traerDetalles());
                     else System.out.println("Mantenimiento no encontrado.");
                 }
@@ -377,9 +435,13 @@ public class App implements CommandLineRunner {
                 case 5 -> {
                     System.out.print("ID del mantenimiento a eliminar: ");
                     String id = sc.nextLine().trim();
-                    if (mantenimientoRepo.buscar(id) != null) {
-                        mantenimientoRepo.eliminar(id);
-                        System.out.println("Mantenimiento eliminado correctamente.");
+                    if (mantenimientoRepo.findById(id).isPresent()) {
+                        try {
+                            mantenimientoRepo.deleteById(id);
+                            System.out.println("Mantenimiento eliminado correctamente.");
+                        } catch (Exception e) {
+                            System.out.println("Error al eliminar el mantenimiento: " + e.getMessage());
+                        }
                     } else System.out.println("Mantenimiento no encontrado.");
                 }
             }
@@ -393,14 +455,18 @@ public class App implements CommandLineRunner {
         System.out.print("Estado         : "); String est   = sc.nextLine().trim();
         System.out.print("Categoria      : "); String cat   = sc.nextLine().trim();
         System.out.print("Fecha          : "); String fecha = sc.nextLine().trim();
-        mantenimientoRepo.guardar(new Mantenimientoderecursos(id, nom, desc, est, cat, fecha));
-        System.out.println("Mantenimiento creado correctamente.");
+        try {
+            mantenimientoRepo.save(new Mantenimientoderecursos(id, nom, desc, est, cat, fecha));
+            System.out.println("Mantenimiento creado correctamente.");
+        } catch (Exception e) {
+            System.out.println("Error al crear el mantenimiento: " + e.getMessage());
+        }
     }
 
     private void actualizarMantenimiento() {
         System.out.print("ID del mantenimiento a actualizar: ");
         String id = sc.nextLine().trim();
-        Mantenimientoderecursos m = mantenimientoRepo.buscar(id);
+        Mantenimientoderecursos m = mantenimientoRepo.findById(id).orElse(null);
         if (m == null) { System.out.println("Mantenimiento no encontrado."); return; }
         System.out.print("Nuevo estado [" + m.getEstado_mantenimientorecursos() + "]: ");
         String v = sc.nextLine().trim();
@@ -408,8 +474,12 @@ public class App implements CommandLineRunner {
         System.out.print("Nueva fecha  [" + m.getFechadeingreso_mantenimientorecursos() + "]: ");
         v = sc.nextLine().trim();
         if (!v.isEmpty()) m.setFechadeingreso_mantenimientorecursos(v);
-        mantenimientoRepo.guardar(m);
-        System.out.println("Mantenimiento actualizado correctamente.");
+        try {
+            mantenimientoRepo.save(m);
+            System.out.println("Mantenimiento actualizado correctamente.");
+        } catch (Exception e) {
+            System.out.println("Error al actualizar el mantenimiento: " + e.getMessage());
+        }
     }
 
     // ══════════════════════════════════════════════════════
@@ -436,7 +506,7 @@ public class App implements CommandLineRunner {
                 case 2 -> {
                     System.out.print("ID del usuario: ");
                     String id = sc.nextLine().trim();
-                    Verificacion u = verificacionRepo.buscar(id);
+                    Verificacion u = verificacionRepo.findById(id).orElse(null);
                     if (u != null) u.mostrarinfo();
                     else System.out.println("Usuario no encontrado.");
                 }
@@ -445,9 +515,13 @@ public class App implements CommandLineRunner {
                 case 5 -> {
                     System.out.print("ID del usuario a eliminar: ");
                     String id = sc.nextLine().trim();
-                    if (verificacionRepo.buscar(id) != null) {
-                        verificacionRepo.eliminar(id);
-                        System.out.println("Usuario eliminado correctamente.");
+                    if (verificacionRepo.findById(id).isPresent()) {
+                        try {
+                            verificacionRepo.deleteById(id);
+                            System.out.println("Usuario eliminado correctamente.");
+                        } catch (Exception e) {
+                            System.out.println("Error al eliminar el usuario: " + e.getMessage());
+                        }
                     } else System.out.println("Usuario no encontrado.");
                 }
             }
@@ -460,14 +534,18 @@ public class App implements CommandLineRunner {
         System.out.print("Correo     : "); String cor  = sc.nextLine().trim();
         System.out.print("Telefono   : "); String tel  = sc.nextLine().trim();
         System.out.print("Contrasena : "); String pass = sc.nextLine().trim();
-        verificacionRepo.guardar(new Verificacion(id, pass, tel, cor, nom));
-        System.out.println("Usuario creado correctamente.");
+        try {
+            verificacionRepo.save(new Verificacion(id, pass, tel, cor, nom));
+            System.out.println("Usuario creado correctamente.");
+        } catch (Exception e) {
+            System.out.println("Error al crear el usuario: " + e.getMessage());
+        }
     }
 
     private void actualizarUsuario() {
         System.out.print("ID del usuario a actualizar: ");
         String id = sc.nextLine().trim();
-        Verificacion u = verificacionRepo.buscar(id);
+        Verificacion u = verificacionRepo.findById(id).orElse(null);
         if (u == null) { System.out.println("Usuario no encontrado."); return; }
         System.out.print("Nueva contrasena (Enter para dejar igual): ");
         String v = sc.nextLine().trim();
@@ -475,8 +553,12 @@ public class App implements CommandLineRunner {
         System.out.print("Nuevo telefono [" + u.getTelefono_personaladministrativo() + "]: ");
         v = sc.nextLine().trim();
         if (!v.isEmpty()) u.setTelefono_personaladministrativo(v);
-        verificacionRepo.guardar(u);
-        System.out.println("Usuario actualizado correctamente.");
+        try {
+            verificacionRepo.save(u);
+            System.out.println("Usuario actualizado correctamente.");
+        } catch (Exception e) {
+            System.out.println("Error al actualizar el usuario: " + e.getMessage());
+        }
     }
 
     // ══════════════════════════════════════════════════════
@@ -486,6 +568,8 @@ public class App implements CommandLineRunner {
         try {
             return Integer.parseInt(sc.nextLine().trim());
         } catch (NumberFormatException e) {
+            return -1;
+        } catch (Exception e) {
             return -1;
         }
     }
